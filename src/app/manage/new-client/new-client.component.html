@@ -1,24 +1,24 @@
 <main class="max-w-5xl mx-auto py-12 px-6">
   <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden">
-    <form [formGroup]="employeeForm">
+    <form [formGroup]="clientForm">
       <div class="p-10">
         <div class="mb-12">
           <div class="flex items-center gap-3 mb-8">
-            <h3 class="text-xl font-bold text-slate-900">Nuevo empleado</h3>
+            <h3 class="text-xl font-bold text-slate-900">Nuevo cliente</h3>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             <div class="col-span-1">
               <label
                 class="block text-sm font-bold text-slate-700 mb-2"
-                for="employeeName"
-                >Nombre completo <span class="text-red-500">*</span></label
+                for="enterpriseName"
+                >Nombre de la empresa <span class="text-red-500">*</span></label
               >
               <input
                 class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
-                id="employeeName"
-                name="employeeName"
-                formControlName="employeeName"
-                placeholder="e.j. Juan Pérez"
+                id="enterpriseName"
+                name="enterpriseName"
+                formControlName="enterpriseName"
+                placeholder="e.j. Claro Dominicana"
                 required=""
                 type="text"
               />
@@ -26,16 +26,16 @@
             <div class="col-span-1">
               <label
                 class="block text-sm font-bold text-slate-700 mb-2"
-                for="cargo"
-                >Cargo</label
+                for="clientName"
+                >Persona de contacto</label
               >
               <div class="relative">
                 <input
                   class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
-                  id="cargo"
-                  name="cargo"
-                  formControlName="role"
-                  placeholder="e.j. Lider SQA"
+                  id="clientName"
+                  name="clientName"
+                  formControlName="clientName"
+                  placeholder="e.j. Jhon Doe"
                   type="text"
                 />
               </div>
@@ -43,35 +43,18 @@
             <div class="col-span-1">
               <label
                 class="block text-sm font-bold text-slate-700 mb-2"
-                for="mode"
-                >Modalidad</label
-              >
-              <select
-                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-slate-900"
-                id="mode"
-                name="mode"
-                formControlName="mode"
-              >
-                <option value="">Seleccione modalidad</option>
-                <option value="Presencial">Presencial</option>
-                <option value="Híbrido">Híbrido</option>
-                <option value="Remoto">Remoto</option>
-              </select>
-            </div>
-            <div class="col-span-1">
-              <label
-                class="block text-sm font-bold text-slate-700 mb-2"
-                for="assignedTo"
-                >Asignado a:</label
+                for="rnc"
+                >RNC</label
               >
               <div class="relative">
                 <input
                   class="w-full pl-4 pr-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
-                  id="assignedTo"
-                  name="assignedTo"
-                  formControlName="assignedTo"
-                  placeholder="e.j. Claro Dominicana"
+                  id="rnc"
+                  name="rnc"
+                  formControlName="rnc"
+                  placeholder="e.j. x-xx-xxxxx-x"
                   type="text"
+                  appRncMask
                 />
               </div>
             </div>
@@ -89,7 +72,7 @@
               <label
                 class="block text-sm font-bold text-slate-700 mb-2"
                 for="contact-email"
-                >Email personal <span class="text-red-500">*</span></label
+                >Email de la empresa <span class="text-red-500">*</span></label
               >
               <input
                 class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
@@ -105,7 +88,7 @@
               <label
                 class="block text-sm font-bold text-slate-700 mb-2"
                 for="contact-phone"
-                >Phone Number</label
+                >Teléfono</label
               >
               <input
                 class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
@@ -119,12 +102,58 @@
             </div>
           </div>
         </div>
-        @if (editingEmployee) {
+        <div class="h-px bg-slate-100 mb-12"></div>
+        <div class="mb-4">
+          <div class="flex items-center gap-3 mb-8">
+            <h3 class="text-xl font-bold text-slate-900">Imagen del cliente</h3>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div class="col-span-1">
+              <label
+                class="block text-sm font-bold text-slate-700 mb-2"
+                for="imageUrl"
+                >URL de la imagen</label
+              >
+              <input
+                class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all placeholder:text-slate-400 text-slate-900"
+                id="imageUrl"
+                name="imageUrl"
+                formControlName="imageUrl"
+                placeholder="https://example.com/image.jpg"
+                type="url"
+              />
+              <p class="text-xs text-slate-500 mt-2">
+                Puedes usar URLs de Google Drive, Google Photos o cualquier
+                enlace de imagen compartido
+              </p>
+            </div>
+            <div class="col-span-1">
+              <label class="block text-sm font-bold text-slate-700 mb-2"
+                >Vista previa</label
+              >
+              <div
+                class="w-full h-100 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-center overflow-hidden"
+              >
+                @if (clientForm.get("imageUrl")?.value) {
+                  <img
+                    [src]="clientForm.get('imageUrl')?.value"
+                    alt="Imagen del cliente"
+                    class="w-full h-full object-contain"
+                    (error)="onImageError()"
+                  />
+                } @else {
+                  <span class="text-slate-400 text-sm">Sin imagen</span>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        @if (editingClient) {
           <div class="h-px bg-slate-100 mb-12"></div>
           <div class="mb-4">
             <div class="flex items-center gap-3 mb-8">
               <h3 class="text-xl font-bold text-slate-900">
-                Estado del empleado
+                Estado del cliente
               </h3>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4">
@@ -181,7 +210,7 @@
         class="bg-slate-50/50 px-10 py-8 flex items-center justify-between border-t border-slate-100"
       >
         <div>
-          @if (!editingEmployee) {
+          @if (!editingClient) {
             <button
               class="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-2"
               type="button"
@@ -194,7 +223,7 @@
         <div>
           <div class="flex items-center gap-4">
             <button
-              (click)="saveEmployee()"
+              (click)="saveClient()"
               class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold shadow-md shadow-primary/20 hover:bg-blue-600 hover:shadow-lg transition-all flex items-center gap-2"
               type="button"
             >

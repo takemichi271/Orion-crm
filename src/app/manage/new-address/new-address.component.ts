@@ -24,13 +24,13 @@ export class NewAddressComponent implements OnInit, OnDestroy {
 
   addressForm!: UntypedFormGroup;
   editingAddress = false;
-  employeeID = '';
+  clientID = '';
   isSubmitting = false;
 
   ngOnInit(): void {
-    this.employeeID = this.activatedRoute.snapshot.params['employeeID'] || '';
-    if (!this.employeeID) {
-      this.alert.error('ID de empleado no válido');
+    this.clientID = this.activatedRoute.snapshot.params['clientID'] || '';
+    if (!this.clientID) {
+      this.alert.error('ID de cliente no válido');
       return;
     }
 
@@ -53,10 +53,7 @@ export class NewAddressComponent implements OnInit, OnDestroy {
     const newAddress = this.addressForm.value;
 
     this.db
-      .set(
-        DB_PATHS.EMPLOYEE_ADDRESS(this.employeeID, newAddress.id),
-        newAddress,
-      )
+      .set(DB_PATHS.CLIENT_ADDRESS(this.clientID, newAddress.id), newAddress)
       .then(() => {
         this.isSubmitting = false;
         this.alert.successBack(
@@ -98,7 +95,7 @@ export class NewAddressComponent implements OnInit, OnDestroy {
 
   private loadAddress(id: string): void {
     this.db
-      .object(DB_PATHS.EMPLOYEE_ADDRESS(this.employeeID, id))
+      .object(DB_PATHS.CLIENT_ADDRESS(this.clientID, id))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (address) => {

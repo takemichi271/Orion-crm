@@ -1,6 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { DbService } from '@app/manage/services/database.service';
-import { Employee } from '@app/Model/employee.model';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-manage',

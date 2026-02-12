@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IEmployee } from '@app/Model/employee.model';
+import { IClient } from '@app/Model/client.model';
 import { DbService } from '@app/manage/services/database.service';
 import { AlertService } from '@app/manage/services/alert.service';
 import { Location } from '@angular/common';
@@ -9,23 +9,23 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-employee',
+  selector: 'app-client',
   standalone: false,
-  templateUrl: './employee.component.html',
-  styleUrl: './employee.component.scss',
+  templateUrl: './client.component.html',
+  styleUrl: './client.component.scss',
 })
-export class EmployeeComponent implements OnInit, OnDestroy {
+export class ClientComponent implements OnInit, OnDestroy {
   private db = inject(DbService);
   private alert = inject(AlertService);
   private location = inject(Location);
   private activatedRoute = inject(ActivatedRoute);
   private destroy$ = new Subject<void>();
 
-  employee: IEmployee | null = null;
+  client: IClient | null = null;
   isLoading = false;
 
   ngOnInit(): void {
-    this.loadEmployee();
+    this.loadClient();
   }
 
   ngOnDestroy(): void {
@@ -33,20 +33,20 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadEmployee(): void {
-    const id = this.getEmployeeId();
+  private loadClient(): void {
+    const id = this.getClientId();
     if (!id) {
-      this.alert.error('No se encontró el ID del empleado');
+      this.alert.error('No se encontró el ID del cliente');
       return;
     }
 
     this.isLoading = true;
     this.db
-      .object<IEmployee>(DB_PATHS.EMPLOYEE_BY_ID(id))
+      .object<IClient>(DB_PATHS.CLIENT_BY_ID(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.employee = this.transformAddresses(data);
+          this.client = this.transformAddresses(data);
           this.isLoading = false;
         },
         error: (err) => {
@@ -56,13 +56,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteEmployee(): void {
-    const id = this.getEmployeeId();
+  deleteClient(): void {
+    const id = this.getClientId();
     if (!id) return;
 
-    this.db.remove(DB_PATHS.EMPLOYEE_BY_ID(id)).then(
+    this.db.remove(DB_PATHS.CLIENT_BY_ID(id)).then(
       () => {
-        this.alert.successBack(ALERT_MESSAGES.EMPLOYEE_DELETED);
+        this.alert.successBack(ALERT_MESSAGES.CLIENT_DELETED);
       },
       (err) => {
         this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
@@ -70,11 +70,11 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     );
   }
 
-  deleteAddress(employeeId: string, addressId: string): void {
-    this.db.remove(DB_PATHS.EMPLOYEE_ADDRESS(employeeId, addressId)).then(
+  deleteAddress(clientId: string, addressId: string): void {
+    this.db.remove(DB_PATHS.CLIENT_ADDRESS(clientId, addressId)).then(
       () => {
         this.alert.success(ALERT_MESSAGES.ADDRESS_DELETED);
-        this.loadEmployee();
+        this.loadClient();
       },
       (err) => {
         this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
@@ -86,18 +86,18 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  private getEmployeeId(): string {
+  private getClientId(): string {
     return this.activatedRoute.snapshot.params['id'] || '';
   }
 
-  private transformAddresses(employee: IEmployee): IEmployee {
+  private transformAddresses(client: IClient): IClient {
     if (
-      employee.addresses &&
-      typeof employee.addresses === 'object' &&
-      !Array.isArray(employee.addresses)
+      client.addresses &&
+      typeof client.addresses === 'object' &&
+      !Array.isArray(client.addresses)
     ) {
-      employee.addresses = Object.values(employee.addresses);
+      client.addresses = Object.values(client.addresses);
     }
-    return employee;
+    return client;
   }
 }

@@ -1,23 +1,31 @@
-# 🔵 OrionCRM - Sistema de Gestión de Empleados
+# 🔵 OrionCRM - Sistema de Gestión de Clientes
 
 ## 📋 Descripción General
 
-**OrionCRM** es una aplicación web moderna desarrollada con Angular 19 que permite gestionar empleados y sus direcciones de forma eficiente. El sistema está diseñado con **Firebase Realtime Database** como backend, proporcionando una solución escalable y en tiempo real para la administración de recursos humanos.
+**OrionCRM** es una aplicación web moderna desarrollada con Angular 19 que permite gestionar clientes y sus direcciones de forma eficiente. El sistema está diseñado con **Firebase Realtime Database** como backend, proporcionando una solución escalable y en tiempo real para la administración de recursos humanos.
 
 ### Características Principales
 
-✅ **Gestión de Empleados**
+✅ **Gestión de Clientes**
 
-- Crear, leer, actualizar y eliminar empleados
-- Seguimiento del estado de empleados (Activo, Pendiente, Inactivo)
-- Asignación de empleados a usuarios
+- Crear, leer, actualizar y eliminar clientes
+- Seguimiento del estado de clientes (Activo, Pendiente, Inactivo)
+- Asignación de clientes a usuarios
 - Información de contacto (email, teléfono)
+- **Foto/Imagen del cliente** con URL de Google Drive o Google Photos
 
 ✅ **Gestión de Direcciones**
 
-- Agregar múltiples direcciones por empleado
+- Agregar múltiples direcciones por cliente
 - Modificar información de direcciones
 - Organización estructurada de datos de ubicación
+
+✅ **Validación de Datos**
+
+- Máscara RNC: `x-xx-xxxxx-x` (9 caracteres con 3 guiones)
+- Máscara Teléfono: `(xxx) xxx-xxxx` (10 dígitos con formato)
+- Validación en tiempo real mientras escribes
+- Prevención de entrada cuando se alcanza el límite de caracteres
 
 ✅ **Control y Seguridad**
 
@@ -44,19 +52,21 @@ OrionCRM/
 │   │   ├── app-routing.module.ts         # Rutas principales
 │   │   ├── app.component.*               # Componente inicio
 │   │   ├── Model/                        # Modelos de datos
-│   │   │   └── employee.model.ts         # Interfaz y clase Employee
+│   │   │   └── client.model.ts         # Interfaz y clase client
 │   │   ├── manage/                       # Módulo de gestión
 │   │   │   ├── manage.component.*        # Dashboard principal
 │   │   │   ├── services/
 │   │   │   │   ├── database.service.ts   # Operaciones base de datos Firebase
 │   │   │   │   └── alert.service.ts      # Gestión de notificaciones
-│   │   │   ├── employee/                 # Listado de empleados
-│   │   │   ├── employee-control/         # Control de empleados
-│   │   │   ├── new-employee/             # Crear nuevos empleados
+│   │   │   ├── client/                 # Listado de clientes
+│   │   │   ├── client-control/         # Control de clientes
+│   │   │   ├── new-client/             # Crear nuevos clientes
 │   │   │   └── new-address/              # Agregar direcciones
 │   │   └── utils/
 │   │       ├── constants.ts              # Constantes de la app
-│   │       └── id-generator.ts           # Generador de IDs
+│   │       ├── id-generator.ts           # Generador de IDs
+│   │       ├── phone-mask.directive.ts   # Máscara de teléfono
+│   │       └── rnc-mask.directive.ts     # Máscara de RNC
 │   ├── assets/                           # Recursos estáticos
 │   └── main.ts                           # Punto de entrada
 
@@ -100,8 +110,8 @@ if (!path) {
 
 ### 4. **Tipado Fuerte con TypeScript**
 
-- Interfaces bien definidas (`IEmployee`)
-- Clases tipadas (`Employee`)
+- Interfaces bien definidas (`IClient`)
+- Clases tipadas (`client`)
 - Tipos genéricos en servicios (`<T>`)
 - Tipos de parámetros explícitos
 
@@ -241,22 +251,49 @@ Gestión de notificaciones visuales:
 
 ---
 
+## 🎭 Directivas Personalizadas
+
+### Phone Mask Directive (`appPhoneMask`)
+
+Formatea automáticamente números telefónicos al formato `(xxx) xxx-xxxx`:
+
+```html
+<input type="tel" formControlName="phone" appPhoneMask placeholder="(809) 000-0000" />
+```
+
+- Acepta exactamente 10 dígitos
+- Formatea automáticamente mientras escribes
+- Previene entrada cuando se alcanza el límite
+
+### RNC Mask Directive (`appRncMask`)
+
+Formatea automáticamente RNC al formato `x-xx-xxxxx-x`:
+
+```html
+<input type="text" formControlName="rnc" appRncMask placeholder="e.j. 1-78-334594-4" />
+```
+
+- Acepta exactamente 9 dígitos
+- Formatea como: 1 dígito - 2 dígitos - 5 dígitos - 1 dígito
+- Previene entrada cuando se alcanza el límite
+
+---
+
 ## 🎯 Modelo de Datos
 
-### Employee
+### client
 
 ```typescript
-interface IEmployee {
+interface IClient {
   id: string; // ID único
-  employeeName: string; // Nombre completo
-  role: string; // Rol/puesto
-  initials: string; // Iniciales
+  enterpriseName: string; // Nombre de la empresa
+  clientName: string; // Persona de contacto
+  rnc: string; // RNC en formato x-xx-xxxxx-x (9 caracteres)
   status: "Active" | "Pending" | "Inactive"; // Estado
-  email: string; // Email
-  phone: string; // Teléfono
-  assignedTo: string; // Asignado a usuario
+  email: string; // Email de la empresa
+  phone: string; // Teléfono en formato (xxx) xxx-xxxx
+  imageUrl?: string; // URL de imagen (opcional)
   addresses: any; // Dirección(es)
-  mode: string; // Modo
 }
 ```
 
