@@ -1,59 +1,286 @@
-# OrionCrm
+# 🔵 OrionCRM - Sistema de Gestión de Empleados
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.19.
+## 📋 Descripción General
 
-## Development server
+**OrionCRM** es una aplicación web moderna desarrollada con Angular 19 que permite gestionar empleados y sus direcciones de forma eficiente. El sistema está diseñado con **Firebase Realtime Database** como backend, proporcionando una solución escalable y en tiempo real para la administración de recursos humanos.
 
-To start a local development server, run:
+### Características Principales
+
+✅ **Gestión de Empleados**
+
+- Crear, leer, actualizar y eliminar empleados
+- Seguimiento del estado de empleados (Activo, Pendiente, Inactivo)
+- Asignación de empleados a usuarios
+- Información de contacto (email, teléfono)
+
+✅ **Gestión de Direcciones**
+
+- Agregar múltiples direcciones por empleado
+- Modificar información de direcciones
+- Organización estructurada de datos de ubicación
+
+✅ **Control y Seguridad**
+
+- Validación de datos en tiempo real
+- Manejo robusto de errores
+- Confirmación de acciones críticas
+- Notificaciones visuales con SweetAlert2
+
+✅ **Interfaz Responsiva**
+
+- Diseño moderno con Tailwind CSS
+- Dashboard intuitivo
+- Experiencia de usuario mejorada
+
+---
+
+## 🏗️ Arquitectura y Estructura del Proyecto
+
+```
+OrionCRM/
+├── src/
+│   ├── app/
+│   │   ├── app.module.ts                 # Módulo principal con Firebase
+│   │   ├── app-routing.module.ts         # Rutas principales
+│   │   ├── app.component.*               # Componente inicio
+│   │   ├── Model/                        # Modelos de datos
+│   │   │   └── employee.model.ts         # Interfaz y clase Employee
+│   │   ├── manage/                       # Módulo de gestión
+│   │   │   ├── manage.component.*        # Dashboard principal
+│   │   │   ├── services/
+│   │   │   │   ├── database.service.ts   # Operaciones base de datos Firebase
+│   │   │   │   └── alert.service.ts      # Gestión de notificaciones
+│   │   │   ├── employee/                 # Listado de empleados
+│   │   │   ├── employee-control/         # Control de empleados
+│   │   │   ├── new-employee/             # Crear nuevos empleados
+│   │   │   └── new-address/              # Agregar direcciones
+│   │   └── utils/
+│   │       ├── constants.ts              # Constantes de la app
+│   │       └── id-generator.ts           # Generador de IDs
+│   ├── assets/                           # Recursos estáticos
+│   └── main.ts                           # Punto de entrada
+
+├── package.json                          # Dependencias
+├── angular.json                          # Configuración Angular
+├── tsconfig.json                         # Configuración TypeScript
+└── firebase.json                         # Configuración Firebase
+```
+
+---
+
+## 💎 Principios de Clean Code Implementados
+
+### 1. **Código Limpio y Legible**
+
+- Nombres descriptivos y significativos para variables, funciones y clases
+- Funciones pequeñas con responsabilidad única
+- Evitar código duplicado (DRY - Don't Repeat Yourself)
+- Comentarios apropiados donde es necesario
+
+### 2. **SOLID Principles**
+
+- **Single Responsibility:** Cada servicio/componente tiene una única responsabilidad
+  - `DbService`: Maneja todas las operaciones de base de datos
+  - `AlertService`: Gestiona todas las notificaciones
+  - Componentes específicos para cada funcionalidad
+- **Open/Closed:** Código abierto a extensión, cerrado a modificación
+- **Dependency Injection:** Uso extensivo de inyección de dependencias de Angular
+
+### 3. **Manejo de Errores Robusto**
+
+```typescript
+// Validación de parámetros
+if (!path) {
+  return throwError(() => new Error('Path is required'));
+}
+
+// Captura y manejo de excepciones
+.pipe(catchError((err) => this.handleError(err)))
+```
+
+### 4. **Tipado Fuerte con TypeScript**
+
+- Interfaces bien definidas (`IEmployee`)
+- Clases tipadas (`Employee`)
+- Tipos genéricos en servicios (`<T>`)
+- Tipos de parámetros explícitos
+
+### 5. **Patrones de Diseño**
+
+- **Singleton:** Servicios inyectables a nivel raíz
+- **Observable Pattern:** Manejo reactivo de datos con RxJS
+- **Modular Architecture:** Separación en módulos feature
+
+### 6. **Modularidad**
+
+- Cada funcionalidad en su propio módulo
+- Lazy loading de módulos según necesidad
+- Reutilización de código mediante servicios compartidos
+
+### 7. **Testing Ready**
+
+- Código preparado para pruebas unitarias
+- Inyección de dependencias para mockeo
+- Archivos `.spec.ts` para cada componente
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+| Tecnología        | Versión  | Propósito                    |
+| ----------------- | -------- | ---------------------------- |
+| **Angular**       | 19.2.0   | Framework principal          |
+| **TypeScript**    | 5.7.2    | Lenguaje de programación     |
+| **Firebase**      | -        | Base de datos en tiempo real |
+| **Tailwind CSS**  | 4.1.18   | Estilos y diseño responsivo  |
+| **RxJS**          | 7.8.0    | Programación reactiva        |
+| **SweetAlert2**   | 11.26.18 | Alertas y confirmaciones     |
+| **Karma/Jasmine** | -        | Testing                      |
+
+---
+
+## 🚀 Instalación y Configuración
+
+### Requisitos Previos
+
+- Node.js 18+ instalado
+- npm o yarn
+- Cuenta Firebase configurada
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio**
 
 ```bash
+git clone <repository-url>
+cd orion-crm
+```
+
+2. **Instalar dependencias**
+
+```bash
+npm install
+```
+
+3. **Configurar Firebase**
+
+- Las credenciales están configuradas en `app.module.ts`
+- Base de datos: `https://test-tecnico-orion-default-rtdb.firebaseio.com`
+
+---
+
+## 📦 Comandos Disponibles
+
+### Desarrollo
+
+```bash
+npm start
+# o
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Inicia el servidor de desarrollo en `http://localhost:4200/`
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Producción
 
 ```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+npm run build
+# o
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Compila el proyecto para producción en `dist/`
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Testing
 
 ```bash
+npm test
+# o
 ng test
 ```
 
-## Running end-to-end tests
+Ejecuta pruebas unitarias con Karma
 
-For end-to-end (e2e) testing, run:
+### Watch Mode
 
 ```bash
-ng e2e
+npm run watch
+# o
+ng build --watch --configuration development
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Recompila automáticamente en cambios
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📋 Servicios Principales
+
+### Database Service (`DbService`)
+
+Servicio centralizado para todas las operaciones con Firebase:
+
+- `list<T>(path)` - Obtener lista de elementos
+- `object<T>(path)` - Obtener un objeto
+- `getListByEqualTo<T>(path, field, value)` - Filtrar por valor
+- `set(path, data)` - Crear/reemplazar datos
+- `push(path, data)` - Agregar nuevo elemento
+- `update(path, data)` - Actualizar datos
+- `remove(path)` - Eliminar datos
+- `on(path, callback)` - Escuchar cambios en tiempo real
+- `once(path, callback)` - Obtener datos una sola vez
+
+### Alert Service (`AlertService`)
+
+Gestión de notificaciones visuales:
+
+- `success(message)` - Notificación de éxito
+- `error(message)` - Notificación de error
+- `info(message)` - Notificación informativa
+- `confirm(title, message)` - Confirmación con diálogo
+- `successBack(message)` - Éxito y navegar atrás
+
+---
+
+## 🎯 Modelo de Datos
+
+### Employee
+
+```typescript
+interface IEmployee {
+  id: string; // ID único
+  employeeName: string; // Nombre completo
+  role: string; // Rol/puesto
+  initials: string; // Iniciales
+  status: "Active" | "Pending" | "Inactive"; // Estado
+  email: string; // Email
+  phone: string; // Teléfono
+  assignedTo: string; // Asignado a usuario
+  addresses: any; // Dirección(es)
+  mode: string; // Modo
+}
+```
+
+---
+
+## ✨ Características de Calidad
+
+✅ Validación de entrada en servicios
+✅ Manejo centralizado de errores
+✅ Tipos TypeScript estrictos
+✅ Componentes reutilizables
+✅ Inyección de dependencias
+✅ Observables para operaciones asincrónicas
+✅ Código documentado y comentado
+✅ Estructura modular y escalable
+
+---
+
+## 📄 Licencia
+
+Este proyecto fue desarrollado con estándares profesionales de desarrollo de software.
+
+---
+
+## 🤝 Contribuciones
+
+Las sugerencias y mejoras son bienvenidas. Los cambios deben seguir los principios de Clean Code establecidos en el proyecto.
