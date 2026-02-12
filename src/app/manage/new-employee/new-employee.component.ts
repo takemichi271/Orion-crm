@@ -72,7 +72,10 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
       mode: ['', Validators.required],
       assignedTo: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      phone: [
+        '',
+        [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)],
+      ],
       status: ['Active'],
       addresses: [],
     });
@@ -150,7 +153,7 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
     }
     if (errors['pattern']) {
       if (fieldName === 'phone') {
-        messages.push('El teléfono debe tener 10 dígitos');
+        messages.push('El teléfono debe tener el formato (XXX) XXX-XXXX');
       } else {
         messages.push('Formato inválido');
       }
