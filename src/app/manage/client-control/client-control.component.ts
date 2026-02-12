@@ -41,7 +41,6 @@ export class ClientControlComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (err) => {
-          console.error('Error loading clients:', err);
           this.isLoading = false;
         },
       });
@@ -50,9 +49,7 @@ export class ClientControlComponent implements OnInit, OnDestroy {
   private setupSearch(): void {
     this.searchControl.valueChanges
       .pipe(startWith(''), debounceTime(300), takeUntil(this.destroy$))
-      .subscribe(() => {
-        // Trigger change detection
-      });
+      .subscribe();
   }
 
   getFilteredClients(): Client[] {

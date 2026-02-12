@@ -24,7 +24,6 @@ export class PhoneMaskDirective implements ControlValueAccessor {
 
     let value = input.value.replace(/\D/g, '');
 
-    // 👇 Si está vacío, permitir borrar completamente
     if (!value) {
       input.value = '';
       this.onChange('');
@@ -36,8 +35,6 @@ export class PhoneMaskDirective implements ControlValueAccessor {
     const formatted = this.formatPhone(value);
 
     input.value = formatted;
-
-    // Guarda limpio
     this.onChange(this.formatPhone(value));
   }
 
@@ -51,11 +48,9 @@ export class PhoneMaskDirective implements ControlValueAccessor {
     const input = this.el.nativeElement;
     const cursorPos = input.selectionStart;
 
-    // Si intenta borrar el paréntesis de cierre
     if (event.key === 'Backspace' && cursorPos === 5) {
       event.preventDefault();
 
-      // Quitar último número del área
       let value = input.value.replace(/\D/g, '');
       value = value.substring(0, value.length - 1);
 
@@ -100,7 +95,6 @@ export class PhoneMaskDirective implements ControlValueAccessor {
       formatted = '(' + area;
     }
 
-    // 👇 Solo cerrar paréntesis si ya completó 3 números
     if (area.length === 3) {
       formatted += ')';
     }
