@@ -65,6 +65,8 @@ export class ClientControlComponent implements OnInit, OnDestroy {
     return this.clients.filter(
       (client) =>
         client.clientName.toLowerCase().includes(searchTerm) ||
+        client.enterpriseName.toLowerCase().includes(searchTerm) ||
+        client.rnc.toLowerCase().includes(searchTerm) ||
         client.id.toLowerCase().includes(searchTerm),
     );
   }
