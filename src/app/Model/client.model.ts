@@ -1,49 +1,46 @@
-export interface IEmployee {
+export interface IClient {
   addresses: any;
   id: string;
-  employeeName: string;
-  role: string;
-  initials: string;
-  mode: string;
+  clientName: string;
+  rnc: string;
   status: 'Active' | 'Pending' | 'Inactive';
   phone: string;
   email: string;
-  assignedTo: string;
+  enterpriseName: string;
+  imageUrl?: string;
 }
 
-export class Employee implements IEmployee {
+export class Client implements IClient {
   addresses: any;
   id: string;
-  employeeName: string;
-  role: string;
-  initials: string;
-  mode: string;
+  clientName: string;
+  rnc: string;
   status: 'Active' | 'Pending' | 'Inactive';
   phone: string;
   email: string;
-  assignedTo: string;
+  enterpriseName: string;
+  imageUrl?: string;
 
   constructor(
     addresses: any = 0,
     id: string = '',
-    employeeName: string = '',
-    role: string = '',
-    initials: string = '',
+    clientName: string = '',
+    rnc: string = '',
     mode: string = '',
     status: 'Active' | 'Pending' | 'Inactive' = 'Active',
     phone: string = '',
     email: string = '',
-    assignedTo: string = '',
+    enterpriseName: string = '',
+    imageUrl: string = '',
   ) {
     this.addresses = addresses;
     this.id = id;
-    this.employeeName = employeeName;
-    this.role = role;
-    this.initials = initials;
-    this.mode = mode;
+    this.clientName = clientName;
+    this.rnc = rnc;
     this.status = status;
     this.phone = phone;
     this.email = email;
-    this.assignedTo = assignedTo;
+    this.enterpriseName = enterpriseName;
+    this.imageUrl = imageUrl;
   }
 }

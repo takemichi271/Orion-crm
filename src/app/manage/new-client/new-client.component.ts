@@ -10,12 +10,12 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-new-employee',
+  selector: 'app-new-client',
   standalone: false,
-  templateUrl: './new-employee.component.html',
-  styleUrls: ['./new-employee.component.scss'],
+  templateUrl: './new-client.component.html',
+  styleUrls: ['./new-client.component.scss'],
 })
-export class NewEmployeeComponent implements OnInit, OnDestroy {
+export class NewClientComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private db = inject(DbService);
   private alert = inject(AlertService);
@@ -23,8 +23,8 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private destroy$ = new Subject<void>();
 
-  employeeForm!: UntypedFormGroup;
-  editingEmployee = false;
+  clientForm!: UntypedFormGroup;
+  editingClient = false;
   isSubmitting = false;
 
   ngOnInit(): void {
@@ -37,75 +37,75 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  saveEmployee(): void {
-    if (!this.employeeForm.valid) {
+  onImageError(): void {
+    this.alert.error('No se pudo cargar la imagen. Verifica la URL.');
+  }
+
+  saveClient(): void {
+    if (!this.clientForm.valid) {
       this.showFormErrors();
       return;
     }
 
     this.isSubmitting = true;
-    const newEmployee = this.employeeForm.value;
+    const newClient = this.clientForm.value;
 
     this.db
-      .set(DB_PATHS.EMPLOYEE_BY_ID(newEmployee.id), newEmployee)
+      .set(DB_PATHS.CLIENT_BY_ID(newClient.id), newClient)
       .then(() => {
         this.isSubmitting = false;
         this.alert.successBack(
-          this.editingEmployee
-            ? ALERT_MESSAGES.EMPLOYEE_UPDATED
-            : ALERT_MESSAGES.EMPLOYEE_CREATED,
+          this.editingClient
+            ? ALERT_MESSAGES.CLIENT_UPDATED
+            : ALERT_MESSAGES.CLIENT_CREATED,
         );
       })
       .catch((err) => {
         this.isSubmitting = false;
         this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-        console.error('Error saving employee:', err);
+        console.error('Error saving client:', err);
       });
   }
 
   private initializeForm(): void {
-    const employeeId = generateOtkId();
-    this.employeeForm = this.fb.group({
-      id: [employeeId],
-      employeeName: ['', Validators.required],
-      role: ['', Validators.required],
-      mode: ['', Validators.required],
-      assignedTo: ['', Validators.required],
+    const clientId = generateOtkId();
+    this.clientForm = this.fb.group({
+      id: [clientId],
+      clientName: ['', Validators.required],
+      enterpriseName: ['', Validators.required],
+      rnc: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: [
-        '',
-        [Validators.required, Validators.pattern(/^\(\d{3}\) \d{3}-\d{4}$/)],
-      ],
+      phone: ['', [Validators.required]],
       status: ['Active'],
       addresses: [],
+      imageUrl: ['', Validators.required],
     });
   }
 
   private checkEditMode(): void {
     const id = this.activatedRoute.snapshot.params['id'];
     if (id) {
-      this.editingEmployee = true;
-      this.loadEmployee(id);
+      this.editingClient = true;
+      this.loadClient(id);
     }
   }
 
-  private loadEmployee(id: string): void {
+  private loadClient(id: string): void {
     this.db
-      .object(DB_PATHS.EMPLOYEE_BY_ID(id))
+      .object(DB_PATHS.CLIENT_BY_ID(id))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (employee) => {
-          if (employee) {
-            this.employeeForm.patchValue(employee);
+        next: (client) => {
+          if (client) {
+            this.clientForm.patchValue(client);
           }
         },
         error: (err) => {
           this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-          console.error('Error loading employee:', err);
+          console.error('Error loading client:', err);
         },
       });
   }
-
   private showFormErrors(): void {
     const errors = this.getFormErrors();
     const errorList = Object.entries(errors)
@@ -121,7 +121,7 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
   private getFormErrors(): { [key: string]: string[] } {
     const errors: { [key: string]: string[] } = {};
     const fieldLabels: { [key: string]: string } = {
-      employeeName: 'Nombre completo',
+      clientName: 'Nombre completo',
       role: 'Cargo',
       mode: 'Modalidad',
       assignedTo: 'Asignado a',
@@ -129,8 +129,8 @@ export class NewEmployeeComponent implements OnInit, OnDestroy {
       phone: 'Teléfono',
     };
 
-    Object.keys(this.employeeForm.controls).forEach((key) => {
-      const control = this.employeeForm.get(key);
+    Object.keys(this.clientForm.controls).forEach((key) => {
+      const control = this.clientForm.get(key);
       if (control?.errors) {
         errors[fieldLabels[key] || key] = this.getErrorMessages(
           key,

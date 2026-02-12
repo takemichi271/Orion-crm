@@ -1,27 +1,27 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Employee } from '@app/Model/employee.model';
+import { Client } from '@app/Model/client.model';
 import { DbService } from '@app/manage/services/database.service';
 import { DB_PATHS, ALERT_MESSAGES } from '@app/utils/constants';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, startWith, map } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-employee-control',
+  selector: 'app-client-control',
   standalone: false,
-  templateUrl: './employee-control.component.html',
-  styleUrl: './employee-control.component.scss',
+  templateUrl: './client-control.component.html',
+  styleUrl: './client-control.component.scss',
 })
-export class EmployeeControlComponent implements OnInit, OnDestroy {
+export class ClientControlComponent implements OnInit, OnDestroy {
   private db = inject(DbService);
   private destroy$ = new Subject<void>();
 
-  employees: Employee[] = [];
+  clients: Client[] = [];
   searchControl = new FormControl('');
   isLoading = false;
 
   ngOnInit(): void {
-    this.loadEmployees();
+    this.loadClients();
     this.setupSearch();
   }
 
@@ -30,18 +30,18 @@ export class EmployeeControlComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadEmployees(): void {
+  private loadClients(): void {
     this.isLoading = true;
     this.db
-      .list<Employee>(DB_PATHS.EMPLOYEES)
+      .list<Client>(DB_PATHS.CLIENTS)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
-          this.employees = this.transformEmployees(data);
+          this.clients = this.transformClients(data);
           this.isLoading = false;
         },
         error: (err) => {
-          console.error('Error loading employees:', err);
+          console.error('Error loading clients:', err);
           this.isLoading = false;
         },
       });
@@ -55,36 +55,36 @@ export class EmployeeControlComponent implements OnInit, OnDestroy {
       });
   }
 
-  getFilteredEmployees(): Employee[] {
+  getFilteredClients(): Client[] {
     const searchTerm = (this.searchControl.value || '').toLowerCase();
 
     if (!searchTerm.trim()) {
-      return this.employees;
+      return this.clients;
     }
 
-    return this.employees.filter(
-      (employee) =>
-        employee.employeeName.toLowerCase().includes(searchTerm) ||
-        employee.id.toLowerCase().includes(searchTerm),
+    return this.clients.filter(
+      (client) =>
+        client.clientName.toLowerCase().includes(searchTerm) ||
+        client.id.toLowerCase().includes(searchTerm),
     );
   }
 
-  trackByEmployeeId(index: number, employee: Employee): string {
-    return employee.id;
+  trackByClientId(index: number, client: Client): string {
+    return client.id;
   }
 
-  private transformEmployees(data: Employee[]): Employee[] {
-    return data.map((employee) => {
+  private transformClients(data: Client[]): Client[] {
+    return data.map((client) => {
       if (
-        employee.addresses &&
-        typeof employee.addresses === 'object' &&
-        !Array.isArray(employee.addresses)
+        client.addresses &&
+        typeof client.addresses === 'object' &&
+        !Array.isArray(client.addresses)
       ) {
-        employee.addresses = Object.values(employee.addresses);
-      } else if (!employee.addresses) {
-        employee.addresses = [];
+        client.addresses = Object.values(client.addresses);
+      } else if (!client.addresses) {
+        client.addresses = [];
       }
-      return employee;
+      return client;
     });
   }
 }

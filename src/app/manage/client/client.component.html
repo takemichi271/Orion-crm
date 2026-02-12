@@ -3,10 +3,10 @@
     <a
       class="hover:text-primary transition-colors cursor-pointer"
       (click)="goBack()"
-      >Empleados</a
+      >Clientes</a
     >
     <span class="material-icons text-xs">></span>
-    <span class="text-slate-900">{{ employee?.employeeName }}</span>
+    <span class="text-slate-900">{{ client?.enterpriseName }}</span>
   </nav>
   <div class="flex flex-col lg:flex-row gap-8">
     <aside class="w-full lg:w-80 flex-shrink-0">
@@ -17,22 +17,20 @@
         <div class="px-6 pb-8">
           <div class="relative -mt-12 mb-4">
             <img
-              alt="Avatar de {{ employee?.employeeName }}"
-              class="w-24 h-24 rounded-lg object-cover border border-slate-200"
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed={{
-                employee?.id
-              }}"
+              alt="Avatar de {{ client?.enterpriseName }}"
+              class="w-24 h-24 rounded-lg object-contain"
+              [src]="client?.imageUrl || ''"
             />
           </div>
           <h2 class="text-xl font-bold text-slate-900 mb-1">
-            {{ employee?.employeeName }}
+            {{ client?.enterpriseName }}
           </h2>
           <span
             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mb-6"
             [ngClass]="
-              employee?.status === 'Active'
+              client?.status === 'Active'
                 ? 'bg-emerald-100 text-emerald-800'
-                : employee?.status === 'Pending'
+                : client?.status === 'Pending'
                   ? 'bg-amber-100 text-amber-800'
                   : 'bg-slate-100 text-slate-600'
             "
@@ -40,44 +38,44 @@
             <span
               class="w-1.5 h-1.5 rounded-full mr-1.5"
               [ngClass]="
-                employee?.status === 'Active'
+                client?.status === 'Active'
                   ? 'bg-emerald-500'
-                  : employee?.status === 'Pending'
+                  : client?.status === 'Pending'
                     ? 'bg-amber-500'
                     : 'bg-slate-400'
               "
             ></span>
-            {{ employee?.status }}
+            {{ client?.status }}
           </span>
           <div class="space-y-4">
             <div>
               <p
                 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1"
               >
-                ID Empleado
+                ID Cliente
               </p>
               <p class="text-sm font-medium text-slate-700">
-                {{ employee?.id }}
+                {{ client?.id }}
               </p>
             </div>
             <div>
               <p
                 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1"
               >
-                Modalidad
+                RNC
               </p>
-              <p class="text-sm font-medium text-slate-700">
-                {{ employee?.mode }}
+              <p class="text-sm font-medium text-slate-700" appRncMask>
+                {{ client?.rnc }}
               </p>
             </div>
             <div>
               <p
                 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1"
               >
-                Asignado a:
+                Persona de contacto
               </p>
               <p class="text-sm font-medium text-slate-700">
-                {{ employee?.assignedTo }}
+                {{ client?.clientName }}
               </p>
             </div>
             <div>
@@ -87,7 +85,7 @@
                 Teléfono
               </p>
               <p class="text-sm font-medium text-slate-700">
-                {{ employee?.phone }}
+                {{ client?.phone }}
               </p>
             </div>
             <div>
@@ -97,20 +95,20 @@
                 Email
               </p>
               <p class="text-sm font-medium text-slate-700">
-                {{ employee?.email }}
+                {{ client?.email }}
               </p>
             </div>
           </div>
           <div class="mt-8 pt-6 border-t border-slate-100">
             <button
-              [routerLink]="['/new-employee', employee?.id]"
+              [routerLink]="['/new-client', client?.id]"
               class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors"
             >
-              Editar empleado
+              Editar cliente
             </button>
             <button
               [swal]="{
-                title: 'Eliminar empleado?',
+                title: 'Eliminar cliente?',
                 text: 'Esta acción no se puede deshacer.',
                 showCancelButton: true,
                 showDenyButton: true,
@@ -119,10 +117,10 @@
                 icon: 'warning',
                 cancelButtonText: 'Volver',
               }"
-              (deny)="deleteEmployee()"
+              (deny)="deleteClient()"
               class="mt-2 w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white border border-slate-200 rounded-lg text-sm font-medium hover:bg-red-500 transition-colors"
             >
-              Eliminar empleado
+              Eliminar cliente
             </button>
           </div>
         </div>
@@ -137,7 +135,7 @@
         </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @for (address of employee?.addresses; track $index) {
+        @for (address of client?.addresses; track $index) {
           <div
             class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden group"
           >
@@ -152,7 +150,7 @@
                   class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <button
-                    [routerLink]="['/new-address', employee?.id, address.id]"
+                    [routerLink]="['/new-address', client?.id, address.id]"
                     class="p-1.5 text-slate-400 hover:text-primary transition-colors"
                   >
                     <span class="material-icons text-sm">Editar</span>
@@ -168,7 +166,7 @@
                       icon: 'warning',
                       cancelButtonText: 'Volver',
                     }"
-                    (deny)="deleteAddress(employee!.id, address.id)"
+                    (deny)="deleteAddress(client!.id, address.id)"
                     class="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
                   >
                     <span class="material-icons text-sm">Eliminar</span>
@@ -192,7 +190,7 @@
           </div>
         }
         <button
-          [routerLink]="['/new-address', employee?.id]"
+          [routerLink]="['/new-address', client?.id]"
           class="group flex flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-slate-200 p-8 hover:border-primary hover:bg-primary/5 transition-all"
         >
           <div

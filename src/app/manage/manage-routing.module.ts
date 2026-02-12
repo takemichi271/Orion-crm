@@ -10,38 +10,38 @@ const routes: Routes = [
       {
         path: 'control',
         loadChildren: () =>
-          import('./employee-control/employee-control.module').then(
-            (m) => m.EmployeeControlModule,
+          import('./client-control/client-control.module').then(
+            (m) => m.ClientControlModule,
           ),
       },
       {
-        path: 'employee/:id',
+        path: 'client/:id',
         loadChildren: () =>
-          import('./employee/employee.module').then((m) => m.EmployeeModule),
+          import('./client/client.module').then((m) => m.ClientModule),
       },
       {
-        path: 'new-employee',
+        path: 'new-client',
         loadChildren: () =>
-          import('./new-employee/new-employee.module').then(
-            (m) => m.NewEmployeeModule,
+          import('./new-client/new-client.module').then(
+            (m) => m.NewClientModule,
           ),
       },
       {
-        path: 'new-employee/:id',
+        path: 'new-client/:id',
         loadChildren: () =>
-          import('./new-employee/new-employee.module').then(
-            (m) => m.NewEmployeeModule,
+          import('./new-client/new-client.module').then(
+            (m) => m.NewClientModule,
           ),
       },
       {
-        path: 'new-address/:employeeID',
+        path: 'new-address/:clientID',
         loadChildren: () =>
           import('./new-address/new-address.module').then(
             (m) => m.NewAddressModule,
           ),
       },
       {
-        path: 'new-address/:employeeID/:id',
+        path: 'new-address/:clientID/:id',
         loadChildren: () =>
           import('./new-address/new-address.module').then(
             (m) => m.NewAddressModule,
