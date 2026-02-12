@@ -63,7 +63,6 @@ export class NewClientComponent implements OnInit, OnDestroy {
       .catch((err) => {
         this.isSubmitting = false;
         this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-        console.error('Error saving client:', err);
       });
   }
 
@@ -102,7 +101,6 @@ export class NewClientComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-          console.error('Error loading client:', err);
         },
       });
   }

@@ -18,21 +18,16 @@ export class RncMaskDirective implements ControlValueAccessor {
 
   constructor(private el: ElementRef<HTMLInputElement>) {}
 
-  // 🔥 Escucha cuando el usuario escribe
   @HostListener('input', ['$event'])
   onInput(event: Event) {
     const input = this.el.nativeElement;
 
-    // Solo números
     let value = input.value.replace(/\D/g, '');
 
-    // Máximo 9 dígitos
     value = value.substring(0, 9);
 
-    // Aplicar máscara visual
     input.value = this.formatRnc(value);
 
-    // Enviar valor limpio al form
     this.onChange(this.formatRnc(value));
   }
 

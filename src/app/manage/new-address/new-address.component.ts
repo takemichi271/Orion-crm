@@ -65,7 +65,6 @@ export class NewAddressComponent implements OnInit, OnDestroy {
       .catch((err) => {
         this.isSubmitting = false;
         this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-        console.error('Error saving address:', err);
       });
   }
 
@@ -105,7 +104,6 @@ export class NewAddressComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.alert.error(ALERT_MESSAGES.GENERIC_ERROR);
-          console.error('Error loading address:', err);
         },
       });
   }
